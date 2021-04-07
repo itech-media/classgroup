@@ -9,12 +9,12 @@ ClassGroup(collection={})
 ```
 
 ### @param {Object} collection
-A collection is an `Object` where the primary keys are references to DOM Elements where the intended group of classes will be applied, think of these as the classes you would create when writing normal CSS. 
+A collection is an `Object` where the root keys are references to DOM Elements where the intended group of classes will be applied, think of these as the classes you would create when writing normal CSS. 
 
 Each one of these references represent a `className` and can accept as a value either an `Object`, an `Array`, a `String`, or a Javascript expression that evaluates to any of the values previously mentioned. When returned, all values will be concatenated to strings.
 
-If the value of a primary key is an `Object` then all subsequent key values will be treated as part of the same group of classes for the represented `className`.
-In other words, the input object will be flattened to a single dimension object and only the primary keys will prevail.
+If the value of a root key is an `Object` then all subsequent key values will be treated as part of the same group of classes for the represented `className`.
+In other words, the input object will be flattened to a single dimension object and only the root keys will prevail.
 
 The ability to use an `Object` gives the author the convenience of grouping classes semantically for better readability.
 When using an `Object`, it is advised that each subsequent key represents a breakpoint (`sm`, `md`, `lg`, `xl`), a state(`hover`, `focus`, `disabled`, etc.), or a semantic group (layout, presentation, etc.).

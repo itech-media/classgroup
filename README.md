@@ -1,6 +1,6 @@
 # ClassGroup
 
-ClassGroup is a utility to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles.
+ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles.
 
 It's foundation is a very simple recursive algorithm in form of a function that only accepts a single `Object` as a parameter, internally named _collection_.
 
@@ -24,50 +24,106 @@ By using a single collection, `ClassGroup` encourages developers to call this fu
 ### @returns {Object}
 The returned `Object` will prevail the same shape as the _collection_ parameter, flattened to one level in depth and with all its values concatenated to strings.
 
-### Example using Svelte & Tailwind
+### Usage
 ```
-// ---------------------------------------------
-// *.svelte
-// ---------------------------------------------
+// CLI
+npm i -D classgroup
 
-<script>
-import ClassGroup from 'classGroup';
+or
 
+yarn add -D classgroup
+
+// JS
+import ClassGroup from 'classgroup';
+
+const classes = ClassGroup({...});
+```
+
+### Examples
+
+* A simple `container` element `className` representation that needs no grouping.
+```
+const classes = ClassGroup({
+  container: 'container p-2 w-full',
+  ...
+});
+
+// Svelte
+<div class={classes.container}>...</div>
+
+// React
+render() {
+  return <div className={classes.container}>...</div>
+}
+```
+
+* Same `container` element with grouped media query utilities
+```
 const classes = ClassGroup({
   container: {
-    sm: {
-      layout: ['p-4'],
-      presentation: ['bg-gray-500']
-    },
-    md: ['md:bg-red-500', 'md:p-6'],
-    lg: ['lg:bg-yellow-500', 'lg:p-8'],
-    xl: ['xl:bg-green-500', 'xl:p-10'],
-    xxl: ['xxl:bg-blue-500', 'xxl:p-12'],
-    focus: (() => {
-        // some logic
-        return 'focus:outline-none'
-    })(),
-    hover: true ? 'hover:bg-gray-700' : '',
-    isActive: 'isActive isActive--fireworks',
+    default: 'container p-2 w-full',
+    md: 'md:p-4',
+    lg: 'lg:mx-auto lg:w-1/2',
   },
-  heading: ['text-xl', 'mb-4'],
-  paragraph: 'text-base text-black',
-  //...
+  ...
 });
-</script>
-
-<div class={classes.container}>
-  ...
-</div>
-
-// ---------------------------------------------
-// HTML output
-// ---------------------------------------------
-
-<div class="bg-gray-500 p-4 md:bg-red-500 md:p-6 lg:bg-yellow-500 lg:p-8 xl:bg-green-500 xl:p-10 xxl:bg-blue-500 xxl:p-12 focus:outline-none hover:bg-red-700 isActive isActive--fireworks ">
-  ...
-</div>
 ```
+
+* Same `container` element with `layout` and `presentation` groups
+```
+const classes = ClassGroup({
+  container: {
+    layout: {
+      default: 'container p-2 w-full',
+      md: 'md:p-4',
+      lg: 'lg:mx-auto lg:w-1/2',
+    },
+    presentation: 'rounded bg-gray-50 text-gray-700',
+  },
+  ...
+});
+```
+
+* Same `container` element with `presentation` subgroups, where `variant` is using a ternary and `animation` is using an [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
+```
+const classes = ClassGroup({
+  container: {
+    layout: {
+      default: 'container p-2 w-full',
+      md: 'md:p-4',
+      lg: 'lg:mx-auto lg:w-1/2',
+    },
+    presentation: {
+      default: 'bg-gray-50 text-gray-700',
+      interaction: 'hover:bg-gray-100',
+      variant: condition ? 'rounded' : '',
+      animation: (() => {
+        switch (arg) {
+            case 'spin':
+              return 'animation-spin';
+
+            case 'ping':
+              return 'animation-ping';
+
+            case 'pulse':
+              return 'animation-pulse';
+
+            case 'bounce':
+              return 'animation-bounce';
+
+            default:
+              return 'animation-none';
+        }
+      })(),
+    }
+  },
+  ...
+});
+```
+
+In all previous examples, the `container` props will be flattened down to the root key and all its values will be concatenated to a single string. Effectively making available all of those classes semantically grouped in `classes.container`.
+
+---
 
 ## VS Code Tailwind CSS IntelliSense
 In order to make the *Tailwind CSS IntelliSense* plugin work, make sure to use the `tailwindCSS.experimental.classRegex` setting with the following regex:

@@ -23,11 +23,11 @@ test('returns flattened input with expected values', () => {
     });
 
     expect(classGroup).toStrictEqual({
-        container: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg xl',
-        header: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg xl',
-        footer: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg xl',
-        image: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg xl',
-        paragraph: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg xl',
-        button: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg xl',
+        container: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg-layout xl-presentation',
+        header: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg-layout xl-presentation',
+        footer: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg-layout xl-presentation',
+        image: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg-layout xl-presentation',
+        paragraph: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg-layout xl-presentation',
+        button: 'sm-layout sm-presentation sm-interaction md-layout md-presentation lg-layout xl-presentation',
     });
 });

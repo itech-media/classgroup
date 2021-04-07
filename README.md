@@ -2,14 +2,14 @@
 
 ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles.
 
-It's foundation is a very simple recursive algorithm in form of a function that only accepts a single `Object` as a parameter, internally named _collection_.
+It's foundation is a very simple yet powerful recursive algorithm in form of a function that only accepts a single `Object` as a parameter, internally named _collection_.
 
 ```
 ClassGroup(collection={})
 ```
 
 ### @param {Object} collection
-A collection is an `Object` where the root keys are references to DOM Elements where the intended group of classes will be applied, think of these as the classes you would create when writing normal CSS. 
+A collection is an `Object` where the root keys are references to DOM Elements where the intended group of classes will be applied. Think of these as the classes you would create when writing normal CSS. 
 
 Each one of these references represent a `className` and can accept as a value either an `Object`, an `Array`, a `String`, or a Javascript expression that evaluates to any of the values previously mentioned. When returned, all values will be concatenated to strings.
 
@@ -67,6 +67,14 @@ const classes = ClassGroup({
   },
   ...
 });
+
+// Svelte
+<div class={classes.container}>...</div>
+
+// React
+render() {
+  return <div className={classes.container}>...</div>
+}
 ```
 
 * Same `container` element with `layout` and `presentation` groups
@@ -82,6 +90,14 @@ const classes = ClassGroup({
   },
   ...
 });
+
+// Svelte
+<div class={classes.container}>...</div>
+
+// React
+render() {
+  return <div className={classes.container}>...</div>
+}
 ```
 
 * Same `container` element with `presentation` subgroups, where `variant` is using a ternary and `animation` is using an [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
@@ -119,6 +135,14 @@ const classes = ClassGroup({
   },
   ...
 });
+
+// Svelte
+<div class={classes.container}>...</div>
+
+// React
+render() {
+  return <div className={classes.container}>...</div>
+}
 ```
 
 In all previous examples, the `container` props will be flattened down to the root key and all its values will be concatenated to a single string. Effectively making available all of those classes semantically grouped in `classes.container`.

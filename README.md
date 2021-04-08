@@ -1,28 +1,6 @@
 # ClassGroup
 
-ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles.
-
-It's foundation is a very simple yet powerful recursive algorithm in form of a function that only accepts a single `Object` as a parameter, internally named _collection_.
-
-```
-ClassGroup(collection={})
-```
-
-### @param {Object} collection
-A collection is an `Object` where the root keys are references to DOM Elements where the intended group of classes will be applied. Think of these as the classes you would create when writing normal CSS. 
-
-Each one of these references represent a `className` and can accept as a value either an `Object`, an `Array`, a `String`, or a Javascript expression that evaluates to any of the values previously mentioned. When returned, all values will be concatenated to strings.
-
-If the value of a root key is an `Object` then all subsequent key values will be treated as part of the same group of classes for the represented `className`.
-In other words, the input object will be flattened to a single dimension object and only the root keys will prevail.
-
-The ability to use an `Object` gives the author the convenience of grouping classes semantically for better readability.
-When using an `Object`, it is advised that each subsequent key represents a breakpoint (`sm`, `md`, `lg`, `xl`), a state(`hover`, `focus`, `disabled`, etc.), or a semantic group (layout, presentation, etc.).
-
-By using a single collection, `ClassGroup` encourages developers to call this function sparingly, perhaps even once per component.
-
-### @returns {Object}
-The returned `Object` will prevail the same shape as the _collection_ parameter, flattened to one level in depth and with all its values concatenated to strings.
+ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com).
 
 ### Usage
 ```
@@ -38,6 +16,39 @@ import ClassGroup from 'classgroup';
 
 const classes = ClassGroup({...});
 ```
+
+It's foundation is a very simple yet powerful recursive algorithm in form of a function that only accepts a single `Object` as a parameter, internally named _collection_.
+
+```
+ClassGroup(collection={})
+```
+
+### @param {Object} collection
+A collection is an `Object` where the root keys are references to DOM Elements where the intended group of classes will be applied. Think of these as the classes you would create when writing normal CSS.
+
+```
+const classes = ClassGroup({
+  container: '...',
+  block: '...',
+  title: '...',
+  subtitle: '...',
+  image: '...',
+  button: '...',
+  ...
+});
+```
+
+Each one of these references represent a `className` and can accept as a value either an `Object`, an `Array` (of strings), a `String`, or a Javascript expression that evaluates to any of the values previously mentioned.
+
+If the value of a root key is an `Object` then all subsequent key values will be treated as part of the same group of classes for the represented `className`.
+In other words, the input object will be flattened to a single dimension object and only the root keys will prevail.
+
+The ability to use an `Object` gives the developer the convenience of grouping classes semantically for better readability. When using an `Object` it is advised that each subsequent key represents a breakpoint (`sm`, `md`, `lg`, `xl`), a state (`hover`, `focus`, `disabled`, etc.), or a semantic group (layout, presentation, etc.).
+
+By using a single collection to define multiple elements, `ClassGroup` encourages developers to call this function sparingly, perhaps even only once per component.
+
+### @returns {Object}
+The returned `Object` will prevail the same shape as the _collection_ parameter, flattened to one level in depth and with all its values concatenated to strings.
 
 ### Examples
 

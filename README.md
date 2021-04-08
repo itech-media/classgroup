@@ -1,6 +1,6 @@
 # ClassGroup
 
-ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com).
+ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com) and improves developer experience with clearer readability.
 
 ### Usage
 ```

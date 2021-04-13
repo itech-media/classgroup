@@ -12,6 +12,8 @@
     "css",
     "classList",
     "tailwind",
+    "tailwindcss",
+    "cubeCSS",
     "apply"
   ],
   "author": "Angel Meraz",

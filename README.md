@@ -1,164 +1,134 @@
 # ClassGroup
 
-ClassGroup is a utility/[grouping mechanism](https://cube.fyi/grouping/) to keep your CSS classses in JS consistently and semantically grouped. It helps uncluttering your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com) and improves developer experience with clearer readability.
+ClassGroup is a utility to help keep your CSS classses in JS consistently and  [semantically grouped](https://cube.fyi/grouping/) while allowing for a separation of concerns. 
 
-### Usage
+It helps unclutter your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com) with negligible performance impact. It improves readability of components, improving developer experience.
+
+ClassGroup is the joint effort of [Angel Meraz](https://www.linkedin.com/in/angelmeraz/) and [Andrew Spode](http://linkedin.com/in/spode) at [iTech Media](http://itech.media).
+
+### Installation
+
 ```
-// CLI
 npm i -D classgroup
 
 or
 
 yarn add -D classgroup
+```
 
-// JS
+### Usage
+
+To use ClassGroup, import it as you would any other utility. 
+
+```
 import ClassGroup from 'classgroup';
-
-const classes = ClassGroup({...});
 ```
 
-It's foundation is a very simple yet powerful recursive algorithm in form of a function that only accepts a single `Object` as a parameter, internally named _collection_.
-
-```
-ClassGroup(collection={})
-```
-
-### @param {Object} collection
-A collection is an `Object` where the root keys are references to DOM Elements where the intended group of classes will be applied. Think of these as the classes you would create when writing normal CSS.
+We then use this simple function by passing in an object with our groupings. 
 
 ```
 const classes = ClassGroup({
-  container: '...',
-  block: '...',
-  title: '...',
-  subtitle: '...',
-  image: '...',
-  button: '...',
-  ...
+  identifier: value,
 });
 ```
 
-Each one of these references represent a `className` and can accept as a value either an `Object`, an `Array` (of strings), a `String`, or a Javascript expression that evaluates to any of the values previously mentioned.
+The `key` is an identifier and is just for our own reference - think of it like the class names you would give when writing traditional CSS.
 
-If the value of a root key is an `Object` then all subsequent key values will be treated as part of the same group of classes for the represented `className`.
-In other words, the input object will be flattened to a single dimension object and only the root keys will prevail.
+The `value` can be a `string`, `array` or `object` with no limit on nesting depth so you can group in anyway you like. 
 
-The ability to use an `Object` gives the developer the convenience of grouping classes semantically for better readability. When using an `Object` it is advised that each subsequent key represents a breakpoint (`sm`, `md`, `lg`, `xl`), a state (`hover`, `focus`, `disabled`, etc.), or a semantic group (layout, presentation, etc.).
+It will return a flattened object that for convention we store in a variable called _classes_. You can then access the resultant string referencing by key as you would any normal object. 
 
-By using a single collection to define multiple elements, `ClassGroup` encourages developers to call this function sparingly, perhaps even only once per component.
 
-### @returns {Object}
-The returned `Object` will prevail the same shape as the _collection_ parameter, flattened to one level in depth and with all its values concatenated to strings.
-
-### Examples
-
-* A simple `container` element `className` representation that needs no grouping.
 ```
-const classes = ClassGroup({
-  container: 'container p-2 w-full',
-  ...
-});
-
 // Svelte
-<div class={classes.container}>...</div>
+<div class="{classes.identifier}">...</div>
 
 // React
 render() {
-  return <div className={classes.container}>...</div>
+  return <div className={classes.identifier}>...</div>
 }
 ```
 
-* Same `container` element with grouped media query utilities
+Let's take a look at a few examples so that this makes sense and see how we can apply this.
+
+
+### Basic Abstraction with Strings or Arrays
+
+This gives us a basic separation of concern and nothing more. This wouldn't really be taking advantage of what ClassGroup facilitates.
+
 ```
 const classes = ClassGroup({
-  container: {
-    default: 'container p-2 w-full',
-    md: 'md:p-4',
-    lg: 'lg:mx-auto lg:w-1/2',
+  identifier: 'class1 class2',
+});
+
+const classes = ClassGroup({
+  identifier: ['class1', 'class2'],
+});
+
+// Both result in:
+{
+  identifier: 'class1 class2',
+}
+```
+
+### Grouping with Objects
+
+The ability to use an object gives the developer the convenience of grouping classes semantically for better readability.
+
+```
+const classes = ClassGroup({
+  identifier: {
+    layout: 'class1 class2',
+    presention: 'class3 class4',
   },
-  ...
 });
 
-// Svelte
-<div class={classes.container}>...</div>
-
-// React
-render() {
-  return <div className={classes.container}>...</div>
+// Results in:
+{
+  identifier: 'class1 class2 class3 class4',
 }
 ```
 
-* Same `container` element with `layout` and `presentation` groups
+It is advised that each subsequent key represents a breakpoint (e.g. `sm`, `md`, `lg`, `xl`), a state (e.g. `hover`, `focus`, `disabled`), or a semantic group (e.g. `layout`, `presentation`).
+
 ```
 const classes = ClassGroup({
-  container: {
+  identifier: {
     layout: {
-      default: 'container p-2 w-full',
-      md: 'md:p-4',
-      lg: 'lg:mx-auto lg:w-1/2',
+      default: 'class1 class2',
+      lg: 'class5 class1',
     },
-    presentation: 'rounded bg-gray-50 text-gray-700',
+    presention: 'class4 class6',
   },
-  ...
 });
 
-// Svelte
-<div class={classes.container}>...</div>
-
-// React
-render() {
-  return <div className={classes.container}>...</div>
+// Results in:
+{
+  identifier: 'class1 class2 class5 class1 class4 class6',
 }
 ```
 
-* Same `container` element with `presentation` subgroups, where `variant` is using a ternary and `animation` is using an [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE)
+There is no limit on nesting depth and you can mix and match types. Other than the initial root key (identifier), all other key names are discarded.
+
+## Advanced Use
+
+By keeping our data in an object, it opens up quite a few patterns. You can for example use functions and ternary operators, or pre-process and combine multiple objects. As long as they return one of the expected types (object, string, array), it'll work. **Any other types are ignored.**
+
 ```
 const classes = ClassGroup({
-  container: {
-    layout: {
-      default: 'container p-2 w-full',
-      md: 'md:p-4',
-      lg: 'lg:mx-auto lg:w-1/2',
-    },
-    presentation: {
-      default: 'bg-gray-50 text-gray-700',
-      interaction: 'hover:bg-gray-100',
-      variant: condition ? 'rounded' : '',
-      animation: (() => {
-        switch (arg) {
-            case 'spin':
-              return 'animation-spin';
-
-            case 'ping':
-              return 'animation-ping';
-
-            case 'pulse':
-              return 'animation-pulse';
-
-            case 'bounce':
-              return 'animation-bounce';
-
-            default:
-              return 'animation-none';
-        }
-      })(),
-    }
+  identifier: {
+    variant: condition ? 'rounded' : '',
+    animation: (() => {
+      switch (arg) {
+          case 'spin':
+            return 'animation-spin';
+          default:
+            return 'animation-none';
+      }
+    })(),
   },
-  ...
 });
-
-// Svelte
-<div class={classes.container}>...</div>
-
-// React
-render() {
-  return <div className={classes.container}>...</div>
-}
 ```
-
-In all previous examples, the `container` props will be flattened down to the root key and all its values will be concatenated to a single string. Effectively making available all of those classes semantically grouped in `classes.container`.
-
----
 
 ## VS Code Tailwind CSS IntelliSense
 In order to make the *Tailwind CSS IntelliSense* plugin work, make sure to use the `tailwindCSS.experimental.classRegex` setting with the following regex:

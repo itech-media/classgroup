@@ -16,8 +16,12 @@
     "cubeCSS",
     "apply"
   ],
-  "author": "Angel Meraz",
+  "author": "iTech Media",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itech-media/classgroup.git"
+  },
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",

@@ -79,7 +79,7 @@ The ability to use an object gives the developer the convenience of grouping cla
 const classes = ClassGroup({
   identifier: {
     layout: 'class1 class2',
-    presention: 'class3 class4',
+    presentation: 'class3 class4',
   },
 });
 
@@ -98,7 +98,7 @@ const classes = ClassGroup({
       default: 'class1 class2',
       lg: 'class5 class1',
     },
-    presention: 'class4 class6',
+    presentation: 'class4 class6',
   },
 });
 
@@ -130,6 +130,33 @@ const classes = ClassGroup({
 });
 ```
 
+## The Overrides parameter
+
+ClassGroup accepts a second parameter referenced as an `overrides` object. It will replace the first parameter key values with matching overrides. The `overrides` parameter structure must correspond to that of the first parameter targetted key structures.
+
+This second parameter intention is to provide an interface to override key values in a component library where default values are already present.
+
+```
+const classes = ClassGroup(
+  {
+    identifier: {
+      layout: 'class1 class2',
+      presentation: 'class3 class4',
+    },
+  },
+  {
+    identifier: {
+      presentation: 'class5',
+    },
+  }
+);
+
+// Results in:
+{
+  identifier: 'class1 class2 class5',
+}
+```
+---
 ## VS Code Tailwind CSS IntelliSense
 In order to make the *Tailwind CSS IntelliSense* plugin work, make sure to use the `tailwindCSS.experimental.classRegex` setting with the following regex:
 ```

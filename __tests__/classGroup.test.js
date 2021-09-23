@@ -71,3 +71,36 @@ test('ignore unsupported types', () => {
         undefined: '',
     });
 });
+
+test('overrides results', () => {
+    const collection = {
+        container: {
+            sm: {
+                layout: ['sm-layout', {
+                    front: 'sm-layout-front',
+                    back: 'sm-layout-back',
+                }],
+                presentation: {
+                    all: ['sm-presentation-front', 'sm-presentation-back'],
+                },
+                interaction: 'sm-interaction',
+            }
+        },
+    };
+
+    const overrides = {
+        container: {
+            sm: {
+                presentation: 'sm-presentation-override',
+                interaction: '',
+                newAddition: 'additional-class-from-new-key',
+            }
+        },
+    }
+
+    const classGroup = ClassGroup(collection, overrides);
+
+    expect(classGroup).toStrictEqual({
+        container: 'sm-layout sm-layout-front sm-layout-back sm-presentation-override additional-class-from-new-key',
+    });
+});

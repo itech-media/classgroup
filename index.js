@@ -6,7 +6,7 @@
  * @returns {Object}
  */
 function setOverrides(collection = {}, overrides = {}) {
-    if (!Object.keys(overrides).length) return collection;
+    if (!overrides && !Object.keys(overrides).length) return collection;
 
     for (const key in overrides) {
         if (Object.hasOwnProperty.call(collection, key)) {

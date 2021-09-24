@@ -130,7 +130,7 @@ const classes = ClassGroup({
 });
 ```
 
-## The Overrides parameter
+### The Overrides parameter
 
 ClassGroup accepts a second parameter referenced as an `overrides` object. It will replace the first parameter key values with matching overrides. The `overrides` parameter structure must correspond to that of the first parameter targetted key structures.
 

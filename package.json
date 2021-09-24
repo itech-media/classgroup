@@ -2,7 +2,9 @@
   "name": "classgroup",
   "version": "1.0.1",
   "description": "A utility to keep your CSS classses in JS consistently and semantically grouped.",
-  "main": "index.js",
+  "type": "module",
+  "main": "./esm/entry.js",
+  "module": "./esm/entry.js",
   "scripts": {
     "test": "jest"
   },

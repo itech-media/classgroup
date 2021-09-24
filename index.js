@@ -39,15 +39,13 @@ export default function ClassGroup(collection = {}, overrides = {}) {
                 if (col === '') break;
 
                 arr.push(col);
-                break;            
-            case '[object Array]': 
-            case '[object Object]': 
+                break;
+            case '[object Array]':
+            case '[object Object]':
                 for (const key in col) {
                     flatten(col[key], arr);
                 }
-                break;            
-            default:
-                console.warn('ClassGroup: Unsupported type used, ignored.');
+                break;
         }
 
         return arr;

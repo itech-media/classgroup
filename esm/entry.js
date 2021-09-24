@@ -3,17 +3,15 @@ export default function ClassGroup(collection = {}) {
 
     function flatten(col, arr) {
         switch (Object.prototype.toString.call(col)) {
-            case '[object String]': 
+            case '[object String]':
                 arr.push(col);
-                break;            
-            case '[object Array]': 
-            case '[object Object]': 
+                break;
+            case '[object Array]':
+            case '[object Object]':
                 for (const key in col) {
                     flatten(col[key], arr);
                 }
-                break;            
-            default:
-                console.warn('ClassGroup: Unsupported type used, ignored.');
+                break;
         }
 
         return arr;

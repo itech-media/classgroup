@@ -29,7 +29,7 @@
  * @param {Object} overrides 
  * @returns 
  */
-module.exports = function ClassGroup(collection = {}) {
+module.exports = function ClassGroup(collection = {}, overrides = {}) {
     collection = setOverrides(collection, overrides);
     const classGroup = {};
 

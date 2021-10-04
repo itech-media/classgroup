@@ -19,7 +19,7 @@ function setOverrides(collection = {}, overrides = {}) {
                 continue;
             }
         }
-         
+
         collection[key] = overrides[key];
     }
 

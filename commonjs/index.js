@@ -41,8 +41,7 @@ module.exports = function ClassGroup(collection = {}, overrides = {}) {
         switch (Object.prototype.toString.call(col)) {
             case '[object String]':
                 if (col === '') break;
-                arr.push(col);
-                break;
+                arr.push(col); break;
             case '[object Array]':
             case '[object Object]':
                 for (const key in col) {

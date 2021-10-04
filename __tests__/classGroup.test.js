@@ -1,4 +1,4 @@
-const ClassGroup = require('../index.js').default;
+const ClassGroup = require('../esm/entry.js').default;
 
 test('string', () => {
     const classGroup = ClassGroup({
@@ -86,6 +86,8 @@ test('overrides results', () => {
                 interaction: 'sm-interaction',
             }
         },
+        string: 'string-styles',
+        array: ['array', 'styles'],
     };
 
     const overrides = {
@@ -96,11 +98,18 @@ test('overrides results', () => {
                 newAddition: 'additional-class-from-new-key',
             }
         },
-    }
+        string: {
+            layout: 'layout-class',
+            presentation: 'sm-presentation-override',
+        },
+        array: 'array-class',
+    };
 
     const classGroup = ClassGroup(collection, overrides);
 
     expect(classGroup).toStrictEqual({
         container: 'sm-layout sm-layout-front sm-layout-back sm-presentation-override additional-class-from-new-key',
+        string: 'layout-class sm-presentation-override',
+        array: 'array-class',
     });
 });

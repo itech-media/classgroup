@@ -10,12 +10,16 @@
 
     for (const key in overrides) {
         if (Object.hasOwnProperty.call(collection, key)) {
+            if (Object.prototype.toString.call(collection[key]) === '[object String]') {
+                collection[key] = {};
+            }
+
             if (Object.prototype.toString.call(overrides[key]) === '[object Object]') {
                 setOverrides(collection[key], overrides[key]);
                 continue;
             }
         }
-        
+
         collection[key] = overrides[key];
     }
 
@@ -37,9 +41,7 @@ module.exports = function ClassGroup(collection = {}, overrides = {}) {
         switch (Object.prototype.toString.call(col)) {
             case '[object String]':
                 if (col === '') break;
-
-                arr.push(col);
-                break;
+                arr.push(col); break;
             case '[object Array]':
             case '[object Object]':
                 for (const key in col) {

@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node: [ 14 ]
+
+    steps:
+      - name: Checkout 🔔
+        uses: actions/checkout@v1
+
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies ✨
+        run: npm install
+
+      - name: Compile Typescript 📝
+        run: npm run tsc
+
+      - name: Run unit tests 🛠
+        run: npm run test
+
+      - name: Release new package version 🛫
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}          

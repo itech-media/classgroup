@@ -1,0 +1,30 @@
+name: CI
+
+on: pull_request
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node: [ 14 ]
+
+    steps:
+      - name: Checkout 🔔
+        uses: actions/checkout@v1
+
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies ✨
+        run: npm install
+
+      - name: Run linting 🧪
+        run: npm run lint
+
+      - name: Run unit tests 🛠
+        run: npm run test

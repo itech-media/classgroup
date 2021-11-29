@@ -25,7 +25,7 @@ test('object with strings', () => {
         container: {
             layout: 'sm-layout',
             presentation: 'sm-presentation',
-        }
+        },
     });
 
     expect(classGroup).toStrictEqual({
@@ -33,19 +33,35 @@ test('object with strings', () => {
     });
 });
 
+test('object with booleans', () => {
+    const classGroup = ClassGroup({
+        container: {
+            layout: true && 'sm-layout',
+            presentation: false && 'sm-presentation',
+        },
+    });
+
+    expect(classGroup).toStrictEqual({
+        container: 'sm-layout',
+    });
+});
+
 test('mixture of types with nesting', () => {
     const classGroup = ClassGroup({
         container: {
             sm: {
-                layout: ['sm-layout', {
-                    front: 'sm-layout-front',
-                    back: 'sm-layout-back',
-                }],
+                layout: [
+                    'sm-layout',
+                    {
+                        front: 'sm-layout-front',
+                        back: 'sm-layout-back',
+                    },
+                ],
                 presentation: {
                     all: ['sm-presentation-front', 'sm-presentation-back'],
                 },
                 interaction: 'sm-interaction',
-            }
+            },
         },
     });
 
@@ -62,7 +78,7 @@ test('ignore unsupported types', () => {
         nan: NaN,
         number: 69,
         undefined: undefined,
-    })
+    });
 
     expect(classGroup).toStrictEqual({
         boolean: '',
@@ -76,15 +92,18 @@ test('overrides results', () => {
     const collection = {
         container: {
             sm: {
-                layout: ['sm-layout', {
-                    front: 'sm-layout-front',
-                    back: 'sm-layout-back',
-                }],
+                layout: [
+                    'sm-layout',
+                    {
+                        front: 'sm-layout-front',
+                        back: 'sm-layout-back',
+                    },
+                ],
                 presentation: {
                     all: ['sm-presentation-front', 'sm-presentation-back'],
                 },
                 interaction: 'sm-interaction',
-            }
+            },
         },
         string: 'string-styles',
         array: ['array', 'styles'],
@@ -96,7 +115,7 @@ test('overrides results', () => {
                 presentation: 'sm-presentation-override',
                 interaction: '',
                 newAddition: 'additional-class-from-new-key',
-            }
+            },
         },
         string: {
             layout: 'layout-class',

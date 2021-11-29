@@ -33,6 +33,19 @@ test('object with strings', () => {
     });
 });
 
+test('object with booleans', () => {
+    const classGroup = ClassGroup({
+        container: {
+            layout: true && 'sm-layout',
+            presentation: false && 'sm-presentation',
+        },
+    });
+
+    expect(classGroup).toStrictEqual({
+        container: 'sm-layout',
+    });
+});
+
 test('mixture of types with nesting', () => {
     const classGroup = ClassGroup({
         container: {

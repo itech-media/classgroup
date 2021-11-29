@@ -1,61 +1,85 @@
 /**
- * Replaces collection key values with matching overrides.
- * Overrides structure must correspond to collection targetted key structures.
- * @param {Object} classgroup 
- * @param {Object} overrides 
- * @returns {Object}
+ * Performs type check of a string
  */
-function setOverrides(collection = {}, overrides = {}) {
-    if (!overrides || !Object.keys(overrides).length) return collection;
-
+function instanceOfString(value) {
+    return typeof value === 'string' || value instanceof String;
+}
+/**
+ * Performs type check of an Array of strings
+ */
+function instanceOfArray(value) {
+    return Array.isArray(value) && value.every(instanceOfString);
+}
+/**
+ * Performs type checks and sets value overrides.
+ */
+function overrideValue(collection, overrides) {
+    if (instanceOfString(collection) || instanceOfArray(collection) || typeof collection === 'boolean') {
+        return overrides;
+    }
+    if (instanceOfString(overrides) || instanceOfArray(overrides) || typeof overrides === 'boolean') {
+        return overrides;
+    }
     for (const key in overrides) {
-        if (Object.hasOwnProperty.call(collection, key)) {
-            if (Object.prototype.toString.call(collection[key]) === '[object String]') {
-                collection[key] = {};
-            }
-
-            if (Object.prototype.toString.call(overrides[key]) === '[object Object]') {
-                setOverrides(collection[key], overrides[key]);
+        if (Object.prototype.hasOwnProperty.call(overrides, key)) {
+            if (collection[key]) {
+                collection[key] = overrideValue(collection[key], overrides[key]);
                 continue;
             }
+            collection[key] = overrides[key];
         }
-
-        collection[key] = overrides[key];
     }
-
     return collection;
 }
-
 /**
- * Flattens the collection parameter into a single dimension object where each key value is a string.
- * If the overrides parameter is present it will replace the targetted key values before flattening.
- * @param {Object} collection 
- * @param {Object} overrides 
- * @returns 
+ * Replaces collection key values with matching overrides.
+ * Overrides parameter structure must correspond to that of the collection parameter targetted key structures.
  */
-export default function ClassGroup(collection = {}, overrides = {}) {
-    collection = setOverrides(collection, overrides);
-    const classGroup = {};
-
-    function flatten(col, arr) {
-        switch (Object.prototype.toString.call(col)) {
-            case '[object String]':
-                if (col === '') break;
-                arr.push(col); break;
-            case '[object Array]':
-            case '[object Object]':
-                for (const key in col) {
-                    flatten(col[key], arr);
-                }
-                break;
+function setOverrides(collection, overrides) {
+    for (const key in overrides) {
+        if (Object.prototype.hasOwnProperty.call(overrides, key)) {
+            if (collection[key]) {
+                collection[key] = overrideValue(collection[key], overrides[key]);
+                continue;
+            }
+            collection[key] = overrides[key];
         }
-
+    }
+    return collection;
+}
+/**
+ * Recursively flattens the collection parameter into a single dimension object transforming each key value into a string.
+ * If the overrides parameter is present it will compare and replace the collection targetted key values before flattening.
+ */
+export default function ClassGroup(collection = {}, overrides) {
+    if (overrides)
+        collection = setOverrides(collection, overrides);
+    const classGroup = {};
+    function flatten(col, arr) {
+        if (instanceOfString(col)) {
+            arr.push(col);
+            return arr;
+        }
+        if (instanceOfArray(col)) {
+            for (const value of col) {
+                arr.push(value);
+            }
+            return arr;
+        }
+        if (typeof col === 'boolean') {
+            return arr;
+        }
+        for (const key in col) {
+            if (Object.prototype.hasOwnProperty.call(col, key)) {
+                flatten(col[key], arr);
+            }
+        }
         return arr;
     }
-
     for (const key in collection) {
-        classGroup[key] = flatten(collection[key], []).join(' ');
+        if (Object.prototype.hasOwnProperty.call(collection, key)) {
+            classGroup[key] = flatten(collection[key], []).filter(Boolean).join(' ');
+        }
     }
-
     return classGroup;
 }

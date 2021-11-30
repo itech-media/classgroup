@@ -34,7 +34,7 @@ jobs:
         run: npm run test
 
       - name: Release new package version 🛫
-        run: npx semantic-release
+        run: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}          
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

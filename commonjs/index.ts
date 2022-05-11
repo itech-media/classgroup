@@ -63,8 +63,10 @@ function setOverrides(collection: Options, overrides: Options): Options {
  * Recursively flattens the collection parameter into a single dimension object transforming each key value into a string.
  * If the overrides parameter is present it will compare and replace the collection targetted key values before flattening.
  */
-module.exports = function ClassGroup(collection: Options = {}, overrides?: Options): Output {
-    if (overrides) collection = setOverrides(collection, overrides);
+module.exports = function ClassGroup(collection: Options = {}, ...overrides: Options[]): Output {
+    if (overrides?.length) {
+        overrides?.forEach((override) => (collection = setOverrides(collection, override)));
+    }
 
     const classGroup: Output = {};
 

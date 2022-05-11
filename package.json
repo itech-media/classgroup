@@ -1,7 +1,7 @@
 {
   "name": "classgroup",
   "version": "1.1.1",
-  "description": "A utility to keep your CSS classses in JS consistently and semantically grouped.",
+  "description": "A utility to keep your CSS classes in JS consistently and semantically grouped.",
   "type": "module",
   "main": "./esm/entry.js",
   "module": "./esm/entry.js",
@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.ts\" \"**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "test": "jest",
-    "tsc": "tsc",
+    "tsc": "node_modules/.bin/tsc",
     "release": "semantic-release --branches main"
   },
   "keywords": [

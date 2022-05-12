@@ -8,4 +8,4 @@ export interface Options {
     [key: string]: OptionValue;
 }
 
-export default function ClassGroup(collection: Options, overrides?: Options): Output;
+export default function ClassGroup(collection: Options, ...overrides: Options[]): Output;

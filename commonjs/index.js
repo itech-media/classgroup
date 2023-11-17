@@ -84,4 +84,3 @@ module.exports = function ClassGroup(collection = {}, ...overrides) {
     }
     return classGroup;
 };
-export {};

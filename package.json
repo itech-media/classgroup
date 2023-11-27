@@ -11,6 +11,7 @@
     "lint": "tslint -p tsconfig.json",
     "test": "jest",
     "tsc": "node_modules/.bin/tsc",
+    "commonjs/tsc": "node_modules/.bin/tsc commonjs/index.ts",
     "release": "semantic-release --branches main"
   },
   "keywords": [

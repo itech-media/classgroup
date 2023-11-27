@@ -1,6 +1,6 @@
 {
   "name": "classgroup",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A utility to keep your CSS classes in JS consistently and semantically grouped.",
   "type": "module",
   "main": "./esm/entry.js",

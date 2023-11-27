@@ -5,6 +5,6 @@
         "strict": true,
         "moduleResolution": "node"
     },
-    "include": ["./esm", "ClassGroup.d.ts"],
+    "include": ["./esm", "./commonjs", "ClassGroup.d.ts"],
     "exclude": ["node_modules", "**/__tests__/*"],
 }

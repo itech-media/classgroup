@@ -1,27 +1,27 @@
 # ClassGroup
 
-ClassGroup is a utility to help keep your CSS classses in JS consistently and  [semantically grouped](https://cube.fyi/grouping/) while allowing for a separation of concerns. 
+ClassGroup is a utility to help keep your CSS classes in JS consistently and [semantically grouped](https://cube.fyi/grouping/) while allowing for a separation of concerns. 
 
-It helps unclutter your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com) with negligible performance impact. It improves readability of components, improving developer experience.
-
-ClassGroup is the joint effort of [Angel Meraz](https://www.linkedin.com/in/angelmeraz/) and [Andrew Spode](http://linkedin.com/in/spode) at [iTech Media](http://itech.media).
+It helps unclutter your markup when using utility-driven CSS principles or frameworks such as [TailwindCSS](https://tailwindcss.com) with negligible performance impact. It improves readability of components, improving [Developer Experience](https://github.blog/2023-06-08-developer-experience-what-is-it-and-why-should-you-care/).
 
 ### Installation
 
 ```
 npm i -D classgroup
-
-or
-
-yarn add -D classgroup
 ```
 
 ### Usage
 
-To use ClassGroup, import it as you would any other utility. 
+To use ClassGroup, import it as you would any other utility: 
 
 ```
 import ClassGroup from 'classgroup';
+```
+
+If your project uses [CommonJS](https://en.wikipedia.org/wiki/CommonJS), then:
+
+```
+import ClassGroup from 'classgroup/commonjs';
 ```
 
 We then use this simple function by passing in an object with our groupings. 
@@ -36,11 +36,11 @@ The `key` is an identifier and is just for our own reference - think of it like 
 
 The `value` can be a `string`, `array` or `object` with no limit on nesting depth so you can group in anyway you like. 
 
-It will return a flattened object that for convention we store in a variable called _classes_. You can then access the resultant string referencing by key as you would any normal object. 
+It will return a flattened object that for convention we store in a variable called `classes`. You can then access the resultant string referencing by [dot notation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors#dot_notation)
 
 
 ```
-// Svelte
+// Svelte, Vue
 <div class="{classes.identifier}">...</div>
 
 // React
@@ -54,20 +54,16 @@ Let's take a look at a few examples so that this makes sense and see how we can 
 
 ### Basic Abstraction with Strings or Arrays
 
-This gives us a basic separation of concern and nothing more. This wouldn't really be taking advantage of what ClassGroup facilitates.
-
 ```
 const classes = ClassGroup({
-  identifier: 'class1 class2',
-});
-
-const classes = ClassGroup({
-  identifier: ['class1', 'class2'],
+  identifier1: 'class1 class2',
+  identifier2: ['class3', 'class4'],
 });
 
 // Both result in:
 {
-  identifier: 'class1 class2',
+  identifier1: 'class1 class2',
+  identifier2: 'class3 class4',
 }
 ```
 
@@ -81,11 +77,13 @@ const classes = ClassGroup({
     layout: 'class1 class2',
     presentation: 'class3 class4',
   },
+  ...
 });
 
 // Results in:
 {
   identifier: 'class1 class2 class3 class4',
+  ...
 }
 ```
 
@@ -96,7 +94,7 @@ const classes = ClassGroup({
   identifier: {
     layout: {
       default: 'class1 class2',
-      lg: 'class5 class1',
+      lg: 'class5 class3',
     },
     presentation: 'class4 class6',
   },
@@ -104,11 +102,11 @@ const classes = ClassGroup({
 
 // Results in:
 {
-  identifier: 'class1 class2 class5 class1 class4 class6',
+  identifier: 'class1 class2 class5 class3 class4 class6',
 }
 ```
 
-There is no limit on nesting depth and you can mix and match types. Other than the initial root key (identifier), all other key names are discarded.
+> There is no limit on nesting depth and you can mix and match types. Other than the primary root key(s) i.e. `identifier`, **all other nested key names are discarded**.
 
 ## Advanced Use
 
@@ -132,28 +130,33 @@ const classes = ClassGroup({
 
 ### The Overrides parameter
 
-ClassGroup accepts a second parameter referenced as an `overrides` object. It will replace the first parameter key values with matching overrides. The `overrides` parameter structure must correspond to that of the first parameter targetted key structures.
+ClassGroup accepts `n` number of subsequent parameters internally referenced as an `overrides` array of objects. These have exactly the same type as the first parameter explained above and they will replace the previous parameter key values with matching overrides.
 
-This second parameter intention is to provide an interface to override key values in a component library where default values are already present.
+> The `overrides` parameter structure must correspond to that of the initial parameter targeted object key structures.
+
+These subsequent parameters intention is to provide an interface to override key values when recycling styling objects (for instance, in a component library) where default values are already present.
 
 ```
-const classes = ClassGroup(
-  {
-    identifier: {
-      layout: 'class1 class2',
-      presentation: 'class3 class4',
-    },
+const baseStyles = {
+  identifier: {
+    layout: 'class1 class2',
+    presentation: 'bg-red',
   },
-  {
-    identifier: {
-      presentation: 'class5',
-    },
-  }
-);
+};
 
-// Results in:
+const styleOverrides = {
+  identifier: {
+    presentation: 'bg-blue',
+  },
+};
+
+const classes = ClassGroup(baseStyles, styleOverrides);
+
+// Effectively overriding the classes from 'baseStyles.identifier.presentation',
+// leaving 'baseStyles.identifier.layout' intact and resulting in:
+
 {
-  identifier: 'class1 class2 class5',
+  identifier: 'class1 class2 bg-blue',
 }
 ```
 ---

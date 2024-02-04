@@ -176,11 +176,11 @@ const classes = ClassGroup(baseStyles, styleOverrides);
 console.log(classes);
 
 // Results in:
+// effectively overriding the classes from 'baseStyles.alert.appearance'
+// and leaving 'baseStyles.alert.layout' intact
 // {
 //   alert: 'flex p-4 bg-red-50',
 // }
-
-// Effectively overriding the classes from 'baseStyles.alert.appearance' and leaving 'baseStyles.alert.layout' intact
 
 // Styles can be also be reused and extended
 const extendOverrides = {

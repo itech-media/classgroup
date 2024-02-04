@@ -75,17 +75,23 @@ Let's take a look at a few examples so that this makes sense and see how we can 
 
 ```js
 const classes = ClassGroup({
-  identifier1: 'class1 class2',
-  identifier2: ['class3', 'class4'],
+  container: 'class1 class2',
+  btn: ['class3', 'class4'],
 });
 
 console.log(classes);
 
 // Results in:
 // {
-//   identifier1: "class1 class2",
-//   identifier2: "class3 class4",
+//   container: "class1 class2",
+//   btn: "class3 class4",
 // }
+
+// In template:
+<div class="{classes.container}">
+  <button class="{classes.button}">Click!</button>
+</div>
+
 ```
 
 ### Grouping with Objects
@@ -94,9 +100,12 @@ The ability to use an object gives the developer the convenience of grouping cla
 
 ```js
 const classes = ClassGroup({
-  identifier: {
-    layout: 'class1 class2',
-    presentation: 'class3 class4',
+  alert: {
+    layout: 'flex p-4',
+    appearance: 'rounded-md bg-yellow-50',
+    hover: 'hover:bg-yellow-100',
+    md: { ... },
+    lg: { ... }
   },
   ...
 });
@@ -105,32 +114,17 @@ console.log(classes);
 
 // Results in:
 // {
-//   identifier: "class1 class2 class3 class4" 
+//   alert: "flex p-4 rounded-md bg-yellow-50 hover:bg-yellow-100 ..."
 // }
 ```
 
-It is advised that each subsequent key represents a breakpoint (e.g. `sm`, `md`, `lg`, `xl`), a state (e.g. `hover`, `focus`, `disabled`), or a semantic group (e.g. `layout`, `presentation`).
+It is advised that each subsequent key represents a breakpoint (e.g. `sm`, `md`, `lg`, `xl`), a state (e.g. `hover`, `focus`, `disabled`), or a semantic group (e.g. `layout`, `appearance`, `transition`, `animation`).
 
-```js
-const classes = ClassGroup({
-  identifier: {
-    layout: {
-      default: 'class1 class2',
-      lg: 'class5 class3',
-    },
-    presentation: 'class4 class6',
-  },
-});
+There is no limit on nesting depth and you can mix and match types. Other than the primary root key(s) i.e. the identifier key of `alert`, **all other nested key names are discarded**.
 
-console.log(classes);
-
-// Results in:
-// {
-//   identifier: "class1 class2 class5 class3 class4 class6"
-// }
-```
-
-> There is no limit on nesting depth and you can mix and match types. Other than the primary root key(s) i.e. `identifier`, **all other nested key names are discarded**.
+> In any case, you are free to define whatever naming pattern works best for you! Know that
+consistent patterns will facilitate **theming** by reducing multiple objects. As per its type
+definition, ClassGroup accepts `n` number of parameters of the same type. [Read more below](#the-overrides-parameter).
 
 ## Advanced Use
 
@@ -139,7 +133,7 @@ By keeping our data in an object, it opens up quite a few patterns. You can for 
 ```js
 const classes = ClassGroup({
   btn: {
-    variant: isRounded ? 'rounded' : '',
+    border: isRounded ? 'rounded' : '',
     animation: (() => {
       switch (arg) {
           case 'spin':
@@ -157,23 +151,23 @@ const classes = ClassGroup({
 
 ### The Overrides parameter
 
-ClassGroup accepts `n` number of subsequent parameters internally referenced as an `overrides` array of objects. These have exactly the same type as the first parameter explained above and they will replace the previous parameter key values with matching overrides.
+ClassGroup accepts `n` number of subsequent object parameters internally referenced as `Overrides`, all governed by same type. In runtime, supplied `Overrides` arguments will be effectively reduced, merged and flattened into one single object by replacing the matching successive argument key values. 
 
-> The `overrides` parameter structure must correspond to that of the initial parameter targeted object key structures.
+> **The `overrides` parameter structure must exactly correspond to that of the initial argument targeted object key structures.**
 
 These subsequent parameters intention is to provide an interface to override key values when recycling styling objects (for instance, in a component library) where default values are already present.
 
 ```js
 const baseStyles = {
-  identifier: {
-    layout: 'class1 class2',
-    presentation: 'bg-red',
+  alert: {
+    layout: 'flex p-4',
+    appearance: 'rounded-md bg-yellow-50',
   },
 };
 
 const styleOverrides = {
-  identifier: {
-    presentation: 'bg-blue',
+  alert: {
+    appearance: 'bg-red-50',
   },
 };
 
@@ -183,10 +177,27 @@ console.log(classes);
 
 // Results in:
 // {
-//   identifier: 'class1 class2 bg-blue',
+//   alert: 'flex p-4 bg-red-50',
 // }
 
-// Effectively overriding the classes from 'baseStyles.identifier.presentation' and leaving 'baseStyles.identifier.layout' intact
+// Effectively overriding the classes from 'baseStyles.alert.appearance' and leaving 'baseStyles.alert.layout' intact
+
+// Styles can be also be reused and extended
+const extendOverrides = {
+  alert: {
+    animation: 'animate-ping',
+  },
+};
+
+const classes = ClassGroup(baseStyles, extendOverrides);
+
+console.log(classes);
+
+// Results in:
+// {
+//   alert: 'flex p-4 rounded-md bg-yellow-50 animate-ping',
+// }
+
 ```
 ---
 ## VS Code Tailwind CSS IntelliSense

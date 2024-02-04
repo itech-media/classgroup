@@ -182,7 +182,7 @@ console.log(classes);
 //   alert: 'flex p-4 bg-red-50',
 // }
 
-// Styles can be also be reused and extended
+// Styles can also be reused and extended
 const extendOverrides = {
   alert: {
     animation: 'animate-ping',

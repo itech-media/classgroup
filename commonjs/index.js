@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 exports.__esModule = true;
 /**
  * Performs type check of a string
@@ -54,13 +54,19 @@ function setOverrides(collection, overrides) {
  * If the overrides parameter is present it will compare and replace the collection targetted key values before flattening.
  */
 module.exports = function ClassGroup(collection) {
-    if (collection === void 0) { collection = {}; }
+    if (collection === void 0) {
+        collection = {};
+    }
     var overrides = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         overrides[_i - 1] = arguments[_i];
     }
     if (overrides === null || overrides === void 0 ? void 0 : overrides.length) {
-        overrides === null || overrides === void 0 ? void 0 : overrides.forEach(function (override) { return (collection = setOverrides(collection, override)); });
+        overrides === null || overrides === void 0
+            ? void 0
+            : overrides.forEach(function (override) {
+                  return (collection = setOverrides(collection, override));
+              });
     }
     var classGroup = {};
     function flatten(col, arr) {

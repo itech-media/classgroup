@@ -1,3 +1,4 @@
 {
-  "type": "commonjs"
+    "main": "./index.js",
+    "type": "commonjs"
 }

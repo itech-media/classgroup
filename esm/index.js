@@ -53,7 +53,9 @@ function setOverrides(collection, overrides) {
  */
 export default function ClassGroup(collection = {}, ...overrides) {
     if (overrides === null || overrides === void 0 ? void 0 : overrides.length) {
-        overrides === null || overrides === void 0 ? void 0 : overrides.forEach((override) => (collection = setOverrides(collection, override)));
+        overrides === null || overrides === void 0
+            ? void 0
+            : overrides.forEach((override) => (collection = setOverrides(collection, override)));
     }
     const classGroup = {};
     function flatten(col, arr) {
